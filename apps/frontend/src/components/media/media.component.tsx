@@ -430,7 +430,7 @@ export const MediaBox: FC<{
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={t('search_media_by_name', 'Search by file name')}
+              placeholder={t('search_media_by_name', 'Search assets by name')}
               className="w-full h-[44px] px-[14px] rounded-[8px] bg-newBgColorInner border border-newColColor text-[14px] outline-none focus:border-[#ff2364]"
             />
           </div>
@@ -485,7 +485,7 @@ export const MediaBox: FC<{
                   {debouncedSearch
                     ? t(
                         'no_media_match_search',
-                        'No media matches your search'
+                        'No assets match your search'
                       )
                     : t(
                         'you_dont_have_any_media_yet',
@@ -495,7 +495,7 @@ export const MediaBox: FC<{
                 <div className="whitespace-pre-line text-newTextColor/[0.6] text-center">
                   {t(
                     'select_or_upload_pictures_max_1gb',
-                    'Select or upload pictures (maximum 1 GB per upload).'
+                    'Select or upload assets (max 1 GB per upload).'
                   )}{' '}
                   {'\n'}
                   {t(

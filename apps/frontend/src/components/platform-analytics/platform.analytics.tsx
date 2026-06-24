@@ -181,7 +181,7 @@ export const PlatformAnalytics = () => {
         <div className="flex gap-[12px] flex-col">
           <div className="flex items-center">
             <h2 className="group-[.sidebar]:hidden flex-1 text-[20px] font-[500]">
-              {t('channels')}
+              {t('accounts', 'Accounts')}
             </h2>
             <div
               onClick={() => setCollapseMenu(collapseMenu === '1' ? '0' : '1')}

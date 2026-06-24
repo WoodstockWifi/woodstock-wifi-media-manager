@@ -124,6 +124,38 @@ Intentionally NOT changed yet:
   nav/title/theme/header were reframed.
 - No routes renamed; auth, backend, Prisma, Temporal, Docker untouched.
 
+## Phase 3.2 — Bespoke agency language on core pages
+
+Copy/label-only reframe (no layout, logic, data-fetching, uploads, or routes changed) so the
+core pages read as a Woodstock & Wifi agency tool. Most edits are English-locale **value**
+changes in `libraries/react-shared-libraries/src/translation/locales/en/translation.json`
+(page-specific keys, low blast radius); a few are inline `t()` defaults where the key
+isn't in the locale.
+
+What changed:
+- **/media → Assets**: empty state "You don't have any media yet" → "No assets yet";
+  "Search by file name" → "Search assets by name"; "No media matches your search" →
+  "No assets match your search"; "Select or upload pictures…" → "Select or upload assets…";
+  modal/button titles Media Library / Editor / Settings, Insert Media, "Add selected media"
+  → Asset Library / Editor / Settings, Insert Asset, "Add selected assets". Upload and
+  selection logic untouched.
+- **/analytics → Performance**: empty state "Can't show analytics yet" → "No performance
+  data yet"; "You have to add Social Media channels" → "Connect social accounts to start
+  tracking performance"; CTA "Go to the calendar to add channels" → "Go to Command to
+  connect accounts"; sidebar "Channels" heading → "Accounts". Analytics data fetching
+  untouched.
+- **/launches → Command**: left-panel empty state "No channels yet" → "No accounts yet"
+  (the Phase 3 command-center header is unchanged).
+
+Intentionally NOT changed:
+- No keys renamed — only English display **values** of page-specific keys plus a few inline
+  defaults. Generic keys (`media`, `channels`, `next`, `cancel`, `select`, `upload`, …) left
+  intact.
+- Calendar, post editor, uploads, media selection, and analytics fetching all unchanged.
+- Settings sweep found no new Postiz / commercial-SaaS copy beyond the already-deferred
+  public-api MCP/CLI prose.
+- No backend / auth / Prisma / Temporal / Docker / deployment changes.
+
 ## Branding follow-ups (intentionally deferred)
 
 These are **left as-is** because they point at real, still-Postiz external artifacts or
