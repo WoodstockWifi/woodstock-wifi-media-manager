@@ -22,6 +22,7 @@ import { DNDProvider } from '@gitroom/frontend/components/launches/helpers/dnd.p
 import { GeneratorComponent } from './generator/generator';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { NewPost } from '@gitroom/frontend/components/launches/new.post';
+import { CommandCenterHeader } from '@gitroom/frontend/components/launches/command.center.header';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useIntegrationList } from '@gitroom/frontend/components/launches/helpers/use.integration.list';
 import useCookie from 'react-use-cookie';
@@ -510,7 +511,7 @@ export const LaunchesComponent = () => {
           >
             <div className="flex items-center">
               <h2 className="group-[.sidebar]:hidden flex-1 text-[20px] font-[500]">
-                {t('channels')}
+                {t('accounts', 'Accounts')}
               </h2>
               <div
                 onClick={() =>
@@ -593,6 +594,7 @@ export const LaunchesComponent = () => {
           </div>
         </div>
         <div className="bg-newBgColorInner flex-1 flex-col flex p-[20px] gap-[12px]">
+          <CommandCenterHeader />
           <Filters />
           <div className="flex-1 flex">
             <Calendar />

@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
 
 export const metadata: Metadata = {
-  title: `${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Admin Stats`,
+  title: `${isGeneralServerSide() ? 'Woodstock & Wifi Media Manager' : 'Woodstock & Wifi Media Manager'} Admin Stats`,
   description: '',
 };
 

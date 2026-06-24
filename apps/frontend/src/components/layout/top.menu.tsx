@@ -19,7 +19,6 @@ interface MenuItemInterface {
 }
 
 export const useMenuItem = () => {
-  const { isGeneral } = useVariables();
   const t = useT();
   const { openModal } = useModals();
 
@@ -34,7 +33,7 @@ export const useMenuItem = () => {
 
   const firstMenu = [
     {
-      name: isGeneral ? t('calendar', 'Calendar') : t('launches', 'Launches'),
+      name: t('command', 'Command'),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +54,7 @@ export const useMenuItem = () => {
       path: '/launches',
     },
     {
-      name: 'Agent',
+      name: t('ai_ideas', 'AI Ideas'),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +72,7 @@ export const useMenuItem = () => {
       path: '/agents',
     },
     {
-      name: t('analytics', 'Analytics'),
+      name: t('performance', 'Performance'),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +93,7 @@ export const useMenuItem = () => {
       path: '/analytics',
     },
     {
-      name: t('media', 'Media'),
+      name: t('assets', 'Assets'),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -136,7 +135,7 @@ export const useMenuItem = () => {
       path: '/plugs',
     },
     {
-      name: t('integrations', 'Integrations'),
+      name: t('connections', 'Connections'),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -190,6 +189,7 @@ export const useMenuItem = () => {
       path: '#',
       role: ['ADMIN', 'SUPERADMIN', 'USER'],
       requireBilling: true,
+      hide: true,
       onClick: handleAgentMediaClick,
     },
     {
@@ -247,6 +247,7 @@ export const useMenuItem = () => {
         </svg>
       ),
       path: 'https://affiliate.postiz.com',
+      hide: true,
       role: ['ADMIN', 'SUPERADMIN', 'USER'],
       requireBilling: true,
     },
@@ -270,6 +271,7 @@ export const useMenuItem = () => {
         </svg>
       ),
       path: '/billing',
+      hide: true,
       role: ['ADMIN', 'SUPERADMIN'],
       requireBilling: true,
     },

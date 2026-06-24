@@ -4,7 +4,7 @@ import { AfterActivate } from '@gitroom/frontend/components/auth/after.activate'
 import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
 export const metadata: Metadata = {
   title: `${
-    isGeneralServerSide() ? 'Postiz' : 'Gitroom'
+    isGeneralServerSide() ? 'Woodstock & Wifi Media Manager' : 'Woodstock & Wifi Media Manager'
   } - Activate your account`,
   description: '',
 };
