@@ -234,7 +234,7 @@ const McpSection = ({
           <div className="text-[13px] text-customColor18 mt-[2px]">
             {t(
               'connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster',
-              'Connect Postiz MCP server to your client (Http streaming) to schedule your posts faster.'
+              'Connect the Woodstock & Wifi Media Manager MCP server to your client (Http streaming) to schedule your posts faster.'
             )}
           </div>
         </div>
@@ -360,30 +360,36 @@ const McpSection = ({
 
 const localCliSteps = [
   {
-    label: 'Install the CLI',
+    labelKey: 'install_cli_package',
+    fallback: 'Install the upstream CLI package',
     code: 'npm install -g postiz',
   },
   {
-    label: 'Run: postiz auth:login',
+    labelKey: 'authenticate_cli',
+    fallback: 'Authenticate the CLI',
     code: 'postiz auth:login',
   },
   {
-    label: 'Install the Postiz skill for your AI agent',
+    labelKey: 'install_agent_skill',
+    fallback: 'Install the upstream AI agent skill',
     code: 'npx skills add gitroomhq/postiz-agent',
   },
 ] as const;
 
 const ciCliSteps = [
   {
-    label: 'Install the CLI',
+    labelKey: 'install_cli_package',
+    fallback: 'Install the upstream CLI package',
     code: 'npm install -g postiz',
   },
   {
-    label: 'Set your API key as an environment variable',
+    labelKey: 'set_api_key_environment_variable',
+    fallback: 'Set your API key as an environment variable',
     code: 'export POSTIZ_API_KEY="{API_KEY}"',
   },
   {
-    label: 'Install the Postiz skill for your AI agent',
+    labelKey: 'install_agent_skill',
+    fallback: 'Install the upstream AI agent skill',
     code: 'npx skills add gitroomhq/postiz-agent',
   },
 ] as const;
@@ -422,7 +428,7 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
           <div className="text-[13px] text-customColor18 mt-[2px]">
             {t(
               'cli_description',
-              'Use the Postiz CLI to automate posting from your terminal, or install the skill to let your AI agent schedule posts for you.'
+              'Use command-line tooling to automate posting from your terminal, or install the skill to let your AI agent schedule posts for you.'
             )}
           </div>
         </div>
@@ -460,7 +466,7 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
         {displaySteps.map((step, i) => (
           <div key={i} className="flex flex-col gap-[6px]">
             <div className="text-[13px] font-[600] text-customColor18">
-              {i + 1}. {step.label}
+              {i + 1}. {t(step.labelKey, step.fallback)}
             </div>
             <pre className="bg-newBgColorInner border border-newBorder rounded-[8px] p-[16px] text-[13px] whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
               {step.code}
@@ -556,7 +562,7 @@ const PublicApiContent = () => {
         <br />
         {t(
           'api_auth_note_line2',
-          'If you are building a product that schedules posts on behalf of other Postiz users,'
+          'If you are building a product that schedules posts on behalf of other Woodstock & Wifi Media Manager users,'
         )}
         <br />
         {t(
@@ -578,7 +584,7 @@ const PublicApiContent = () => {
             <div className="text-[13px] text-customColor18 mt-[2px]">
               {t(
                 'use_postiz_api_to_integrate_with_your_tools',
-                'Use Postiz API to integrate with your tools.'
+                'Use the Woodstock & Wifi Media Manager API to integrate with your tools.'
               )}
             </div>
           </div>
