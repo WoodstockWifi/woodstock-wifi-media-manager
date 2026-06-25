@@ -755,5 +755,6 @@
   "uploading_logo": "Enviando...",
   "logo_upload_hint": "PNG, JPG, WebP ou GIF. Máx. 10 MB.",
   "logo_upload_failed": "Não foi possível enviar este logotipo. Tente PNG, JPG, WebP ou GIF com menos de 10 MB.",
-  "logo_uploaded": "Logotipo enviado"
+  "logo_uploaded": "Logotipo enviado",
+  "list_empty_hint": "Crie uma publicação ou conecte um canal para começar a preencher este calendário de conteúdo."
 }

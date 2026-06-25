@@ -755,5 +755,6 @@
   "uploading_logo": "Importation...",
   "logo_upload_hint": "PNG, JPG, WebP ou GIF. 10 Mo max.",
   "logo_upload_failed": "Impossible d’importer ce logo. Essayez un PNG, JPG, WebP ou GIF de moins de 10 Mo.",
-  "logo_uploaded": "Logo importé"
+  "logo_uploaded": "Logo importé",
+  "list_empty_hint": "Créez une publication ou connectez un canal pour commencer à remplir ce planning de contenu."
 }

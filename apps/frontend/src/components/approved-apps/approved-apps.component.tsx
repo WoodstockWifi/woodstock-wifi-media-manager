@@ -47,7 +47,10 @@ export const ApprovedAppsComponent: FC = () => {
           );
           mutate();
         } catch {
-          toaster.show(t('failed_to_revoke', 'Failed to revoke access'), 'warning');
+          toaster.show(
+            t('failed_to_revoke', 'Failed to revoke access'),
+            'warning'
+          );
         }
       }
     },
@@ -61,9 +64,7 @@ export const ApprovedAppsComponent: FC = () => {
   return (
     <div className="flex flex-col gap-[20px]">
       <div className="flex flex-col">
-        <h3 className="text-[20px]">
-          {t('approved_apps', 'Approved Apps')}
-        </h3>
+        <h3 className="text-[20px]">{t('approved_apps', 'Approved Apps')}</h3>
         <div className="text-customColor18 mt-[4px]">
           {t(
             'apps_you_have_authorized',
@@ -72,7 +73,7 @@ export const ApprovedAppsComponent: FC = () => {
         </div>
       </div>
 
-      <div className="bg-sixth border-fifth border rounded-[4px] p-[24px]">
+      <div className="bg-sixth border-fifth border rounded-[8px] p-[24px]">
         {!apps?.length ? (
           <div className="text-customColor18">
             {t('no_approved_apps', 'No approved apps yet.')}

@@ -16,6 +16,23 @@ type Client = {
   picture?: string | null;
 };
 
+const CLIENT_AVATAR_COLORS = [
+  '#ff2364',
+  '#00d2c8',
+  '#d81b52',
+  '#0f766e',
+  '#334155',
+  '#111827',
+];
+
+const getClientAvatarColor = (name: string) => {
+  const colorIndex = name
+    .split('')
+    .reduce((total, letter) => total + letter.charCodeAt(0), 0);
+
+  return CLIENT_AVATAR_COLORS[colorIndex % CLIENT_AVATAR_COLORS.length];
+};
+
 const getInitials = (name: string) =>
   name
     .split(' ')
@@ -23,7 +40,7 @@ const getInitials = (name: string) =>
     .slice(0, 2)
     .map((part) => part[0])
     .join('')
-    .toUpperCase();
+    .toUpperCase() || 'C';
 
 const ClientAvatar = ({
   client,
@@ -45,8 +62,13 @@ const ClientAvatar = ({
 
   return (
     <div
+      style={{
+        backgroundColor: client.picture
+          ? undefined
+          : getClientAvatarColor(client.name),
+      }}
       className={clsx(
-        'relative flex items-center justify-center rounded-[10px] bg-newTableHeader text-[12px] font-[700] uppercase text-newTextColor overflow-hidden',
+        'relative flex items-center justify-center rounded-[10px] text-[12px] font-[700] uppercase text-white overflow-hidden shadow-[0_8px_18px_rgba(0,0,0,0.18)]',
         className
       )}
     >
@@ -368,19 +390,39 @@ export const Logo = () => {
             ? `${t('client', 'Client')}: ${selectedClient.name}`
             : t('select_client_tooltip', 'Select client')
         }
-        className="relative h-[54px] w-[58px] rounded-[12px] flex flex-col items-center justify-center gap-[2px] transition-colors hover:bg-newTableHeader"
+        className={clsx(
+          'relative h-[54px] w-[58px] rounded-[12px] flex flex-col items-center justify-center gap-[2px] transition-colors hover:bg-newTableHeader',
+          open && 'bg-newTableHeader ring-1 ring-[#ff2364]/45'
+        )}
         onClick={() => setOpen((value) => !value)}
       >
         <div className="relative">
           <ClientAvatar client={selectedClient} className="h-[36px] w-[36px]" />
         </div>
-        <span className="text-[9px] font-[700] leading-none text-textItemBlur">
+        <span className="flex items-center gap-[2px] text-[9px] font-[700] leading-none text-textItemBlur">
           {t('client', 'Client')}
+          <svg
+            width="8"
+            height="8"
+            viewBox="0 0 12 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={clsx('transition-transform', open && 'rotate-180')}
+            aria-hidden="true"
+          >
+            <path
+              d="M3 4.5L6 7.5L9 4.5"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </span>
       </button>
 
       {open && (
-        <div className="fixed left-[86px] top-[20px] z-[9999] w-[288px] rounded-[12px] border border-tableBorder bg-newBgColorInner p-[8px] shadow-[0_18px_45px_rgba(0,0,0,0.35)]">
+        <div className="absolute left-[calc(100%+10px)] top-0 z-[9999] w-[288px] rounded-[12px] border border-tableBorder bg-newBgColorInner p-[8px] shadow-[0_18px_45px_rgba(0,0,0,0.35)]">
           <div className="px-[8px] pb-[8px] pt-[4px] text-[12px] font-[700] uppercase tracking-[0.08em] text-textItemBlur">
             {t('client_workspace', 'Client workspace')}
           </div>

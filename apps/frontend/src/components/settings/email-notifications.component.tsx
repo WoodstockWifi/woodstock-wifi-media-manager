@@ -98,16 +98,14 @@ const EmailNotificationsComponent = () => {
 
   if (isLoading) {
     return (
-      <div className="my-[16px] mt-[16px] bg-sixth border-fifth border rounded-[4px] p-[24px]">
-        <div className="animate-pulse">
-          {t('loading', 'Loading...')}
-        </div>
+      <div className="my-[16px] mt-[16px] bg-sixth border-fifth border rounded-[8px] p-[24px]">
+        <div className="animate-pulse">{t('loading', 'Loading...')}</div>
       </div>
     );
   }
 
   return (
-    <div className="my-[16px] mt-[16px] bg-sixth border-fifth border rounded-[4px] p-[24px] flex flex-col gap-[24px]">
+    <div className="my-[16px] mt-[16px] bg-sixth border-fifth border rounded-[8px] p-[24px] flex flex-col gap-[24px]">
       <div className="mt-[4px]">
         {t('email_notifications', 'Email Notifications')}
       </div>
@@ -170,4 +168,3 @@ const EmailNotificationsComponent = () => {
 };
 
 export default EmailNotificationsComponent;
-

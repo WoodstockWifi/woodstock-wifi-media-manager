@@ -755,5 +755,6 @@
   "uploading_logo": "Uploaden...",
   "logo_upload_hint": "PNG, JPG, WebP of GIF. Max 10 MB.",
   "logo_upload_failed": "Kon dit logo niet uploaden. Probeer een PNG, JPG, WebP of GIF onder 10 MB.",
-  "logo_uploaded": "Logo geüpload"
+  "logo_uploaded": "Logo geüpload",
+  "list_empty_hint": "Maak een post aan of koppel een kanaal om deze contentplanning te vullen."
 }
