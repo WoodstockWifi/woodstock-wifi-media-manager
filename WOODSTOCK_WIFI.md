@@ -200,6 +200,19 @@ Intentionally NOT changed yet:
   SVG upload is intentionally blocked by the shared upload validator until sanitizing is
   added.
 
+### Phase 4.1 — Cloud Design visual polish
+
+Small frontend-only polish pass based on the Cloud/Claude Design review:
+
+- Client switcher now reads more clearly as an interactive control, with selected/open state,
+  subtle chevron affordance, stronger fallback initials, and dropdown anchoring relative to
+  the sidebar trigger instead of hardcoded viewport coordinates.
+- Onboarding CTAs use the Woodstock & Wifi coral action color and 8px radius; the old green
+  tutorial CTA is removed.
+- Settings-style panels in Teams, Webhooks, Auto Post, Sets, Signatures, Shortlink, Email,
+  Date Metrics, Approved Apps, and Plugs use the same 8px radius as the shared button system.
+- Command list empty state now has an on-brand icon and hint copy in the active app languages.
+
 ## Branding follow-ups (intentionally deferred)
 
 These are **left as-is** because they point at real, still-Postiz external artifacts or

@@ -755,5 +755,6 @@
   "uploading_logo": "Wird hochgeladen...",
   "logo_upload_hint": "PNG, JPG, WebP oder GIF. Max. 10 MB.",
   "logo_upload_failed": "Dieses Logo konnte nicht hochgeladen werden. Versuche PNG, JPG, WebP oder GIF unter 10 MB.",
-  "logo_uploaded": "Logo hochgeladen"
+  "logo_uploaded": "Logo hochgeladen",
+  "list_empty_hint": "Erstelle einen Beitrag oder verbinde einen Kanal, um diesen Content-Plan zu füllen."
 }

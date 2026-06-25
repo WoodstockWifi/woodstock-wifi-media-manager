@@ -65,14 +65,14 @@ const ShortlinkPreferenceComponent = () => {
 
   if (isLoading) {
     return (
-      <div className="my-[16px] mt-[16px] bg-sixth border-fifth border rounded-[4px] p-[24px]">
+      <div className="my-[16px] mt-[16px] bg-sixth border-fifth border rounded-[8px] p-[24px]">
         <div className="animate-pulse">{t('loading', 'Loading...')}</div>
       </div>
     );
   }
 
   return (
-    <div className="my-[16px] mt-[16px] bg-sixth border-fifth border rounded-[4px] p-[24px] flex flex-col gap-[24px]">
+    <div className="my-[16px] mt-[16px] bg-sixth border-fifth border rounded-[8px] p-[24px] flex flex-col gap-[24px]">
       <div className="mt-[4px]">
         {t('shortlink_settings', 'Shortlink Settings')}
       </div>
@@ -97,15 +97,11 @@ const ShortlinkPreferenceComponent = () => {
             value={localValue}
             onChange={handleChange}
           >
-            <option value="ASK">
-              {t('shortlink_ask', 'Ask every time')}
-            </option>
+            <option value="ASK">{t('shortlink_ask', 'Ask every time')}</option>
             <option value="YES">
               {t('shortlink_yes', 'Always shortlink')}
             </option>
-            <option value="NO">
-              {t('shortlink_no', 'Never shortlink')}
-            </option>
+            <option value="NO">{t('shortlink_no', 'Never shortlink')}</option>
           </Select>
         </div>
       </div>
@@ -114,4 +110,3 @@ const ShortlinkPreferenceComponent = () => {
 };
 
 export default ShortlinkPreferenceComponent;
-

@@ -755,5 +755,6 @@
   "uploading_logo": "Caricamento...",
   "logo_upload_hint": "PNG, JPG, WebP o GIF. Max 10 MB.",
   "logo_upload_failed": "Impossibile caricare questo logo. Prova PNG, JPG, WebP o GIF sotto i 10 MB.",
-  "logo_uploaded": "Logo caricato"
+  "logo_uploaded": "Logo caricato",
+  "list_empty_hint": "Crea un post o collega un canale per iniziare a riempire questo calendario dei contenuti."
 }

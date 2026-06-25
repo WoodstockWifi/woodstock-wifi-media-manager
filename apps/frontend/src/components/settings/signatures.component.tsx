@@ -67,7 +67,7 @@ export const SignaturesComponent: FC<{
           'You can add signatures to your account to be used in your posts.'
         )}
       </div>
-      <div className="my-[16px] mt-[16px] bg-sixth border-fifth items-center border rounded-[4px] p-[24px] flex gap-[24px]">
+      <div className="my-[16px] mt-[16px] bg-sixth border-fifth items-center border rounded-[8px] p-[24px] flex gap-[24px]">
         <div className="flex flex-col w-full">
           {!!data?.length && (
             <div
@@ -108,14 +108,20 @@ export const SignaturesComponent: FC<{
                   )}
                   <div className="flex justify-center">
                     <div>
-                      <Button onClick={addSignature(p)} className="rounded-[8px]">
+                      <Button
+                        onClick={addSignature(p)}
+                        className="rounded-[8px]"
+                      >
                         {t('edit', 'Edit')}
                       </Button>
                     </div>
                   </div>
                   <div className="flex justify-center">
                     <div>
-                      <Button onClick={deleteSignature(p)} className="rounded-[8px]">
+                      <Button
+                        onClick={deleteSignature(p)}
+                        className="rounded-[8px]"
+                      >
                         {t('delete', 'Delete')}
                       </Button>
                     </div>
@@ -184,7 +190,7 @@ const AddOrRemoveSignature: FC<{
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(callBack)}>
-        <div className="relative flex gap-[20px] flex-col flex-1 rounded-[4px] pt-0">
+        <div className="relative flex gap-[20px] flex-col flex-1 rounded-[8px] pt-0">
           <button
             className="outline-none absolute end-[20px] top-[15px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
             type="button"
@@ -231,12 +237,8 @@ const AddOrRemoveSignature: FC<{
               setValueAs: (value) => value === 'true',
             })}
           >
-            <option value="false">
-              {t('no', 'No')}
-            </option>
-            <option value="true">
-              {t('yes', 'Yes')}
-            </option>
+            <option value="false">{t('no', 'No')}</option>
+            <option value="true">{t('yes', 'Yes')}</option>
           </Select>
 
           <Button type="submit" className="rounded-[8px]">

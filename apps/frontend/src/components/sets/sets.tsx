@@ -46,7 +46,12 @@ const SaveSetModal: FC<{
         />
       </div>
       <div className="flex gap-2 justify-end">
-        <Button type="button" secondary onClick={onCancel} className="rounded-[8px]">
+        <Button
+          type="button"
+          secondary
+          onClick={onCancel}
+          className="rounded-[8px]"
+        >
           {t('cancel', 'Cancel')}
         </Button>
         <Button type="submit" disabled={!name.trim()} className="rounded-[8px]">
@@ -171,7 +176,7 @@ export const Sets: FC = () => {
       <div className="text-customColor18 mt-[4px]">
         Manage your content sets for easy reuse across posts.
       </div>
-      <div className="my-[16px] mt-[16px] bg-sixth border-fifth items-center border rounded-[4px] p-[24px] flex gap-[24px]">
+      <div className="my-[16px] mt-[16px] bg-sixth border-fifth items-center border rounded-[8px] p-[24px] flex gap-[24px]">
         <div className="flex flex-col w-full">
           {!!data?.length && (
             <div className="grid grid-cols-[2fr,1fr,1fr] w-full gap-y-[10px]">
