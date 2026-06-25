@@ -344,6 +344,7 @@ export const DecisionModal: FC<{
       <div>{description}</div>
       <div className="flex gap-[12px] mt-[16px]">
         <Button
+          className="rounded-[8px] bg-[#ff2364] hover:bg-[#d81b52]"
           onClick={() => {
             resolution(true);
             closeCurrent();
@@ -353,6 +354,8 @@ export const DecisionModal: FC<{
         </Button>
         {!onlyApprove && (
           <Button
+            secondary
+            className="rounded-[8px] border border-tableBorder text-textColor"
             onClick={() => {
               resolution(false);
               closeCurrent();

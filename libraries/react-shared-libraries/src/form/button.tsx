@@ -9,7 +9,16 @@ import {
   useState,
 } from 'react';
 import { clsx } from 'clsx';
-const ReactLoading = ({ color = '#fff', width = 20, height = 20 }: { type?: string; color?: string; width?: number; height?: number }) => {
+const ReactLoading = ({
+  color = '#fff',
+  width = 20,
+  height = 20,
+}: {
+  type?: string;
+  color?: string;
+  width?: number;
+  height?: number;
+}) => {
   const size = Math.min(width, height);
   const borderWidth = Math.max(2, Math.round(size / 8));
   return (
@@ -49,7 +58,7 @@ export const Button: FC<
         (props.disabled || loading) && 'opacity-50 pointer-events-none',
         `${
           secondary ? 'bg-third' : 'bg-forth text-white'
-        } px-[24px] h-[40px] cursor-pointer items-center justify-center flex relative`,
+        } px-[24px] h-[40px] cursor-pointer items-center justify-center flex relative rounded-[8px]`,
         props?.className
       )}
     >

@@ -452,7 +452,24 @@ export class IntegrationRepository {
     });
   }
 
-  updateIntegrationGroup(org: string, id: string, group: string) {
+  async updateIntegrationGroup(org: string, id: string, group: string) {
+    const customer = group
+      ? await this._customers.model.customer.findFirst({
+          where: {
+            id: group,
+            orgId: org,
+            deletedAt: null,
+          },
+          select: {
+            id: true,
+          },
+        })
+      : null;
+
+    if (group && !customer) {
+      throw new Error('Customer not found');
+    }
+
     return this._integration.model.integration.update({
       where: {
         id,
@@ -467,10 +484,49 @@ export class IntegrationRepository {
         : {
             customer: {
               connect: {
-                id: group,
+                id: customer!.id,
               },
             },
           },
+    });
+  }
+
+  createCustomer(orgId: string, name: string, picture?: string) {
+    return this._customers.model.customer.create({
+      data: {
+        orgId,
+        name,
+        picture: picture || undefined,
+      },
+    });
+  }
+
+  async updateCustomer(
+    orgId: string,
+    id: string,
+    name: string,
+    picture?: string
+  ) {
+    const customer = await this._customers.model.customer.findFirst({
+      where: {
+        id,
+        orgId,
+        deletedAt: null,
+      },
+    });
+
+    if (!customer) {
+      throw new Error('Customer not found');
+    }
+
+    return this._customers.model.customer.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        picture: picture || null,
+      },
     });
   }
 
@@ -479,6 +535,9 @@ export class IntegrationRepository {
       where: {
         orgId,
         deletedAt: null,
+      },
+      orderBy: {
+        name: 'asc',
       },
     });
   }

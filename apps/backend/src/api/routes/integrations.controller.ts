@@ -22,6 +22,7 @@ import { PostsService } from '@gitroom/nestjs-libraries/database/prisma/posts/po
 import { IntegrationTimeDto } from '@gitroom/nestjs-libraries/dtos/integrations/integration.time.dto';
 import { PlugDto } from '@gitroom/nestjs-libraries/dtos/plugs/plug.dto';
 import { RefreshToken } from '@gitroom/nestjs-libraries/integrations/social.abstract';
+import { CustomerDto } from '@gitroom/nestjs-libraries/dtos/integrations/customer.dto';
 
 import { timer } from '@gitroom/helpers/utils/timer';
 import { TelegramProvider } from '@gitroom/nestjs-libraries/integrations/social/telegram.provider';
@@ -50,7 +51,35 @@ export class IntegrationsController {
     @Param('id') id: string,
     @Body() body: any
   ) {
-    return this._integrationService.saveProviderPage(org.id, id, body);
+    const customer = body.customer || body.client || '';
+    const storedCustomer =
+      !customer && body.state
+        ? await ioRedis.get(`customer:${body.state}`)
+        : '';
+    const selectedCustomer = customer || storedCustomer;
+
+    if (storedCustomer && body.state) {
+      await ioRedis.del(`customer:${body.state}`);
+    }
+
+    const result = await this._integrationService.saveProviderPage(
+      org.id,
+      id,
+      body
+    );
+
+    if (selectedCustomer) {
+      await this._integrationService.updateIntegrationGroup(
+        org.id,
+        id,
+        selectedCustomer
+      );
+    }
+
+    return {
+      ...result,
+      ...(selectedCustomer ? { customer: selectedCustomer } : {}),
+    };
   }
 
   @Get('/:identifier/internal-plugs')
@@ -61,6 +90,32 @@ export class IntegrationsController {
   @Get('/customers')
   getCustomers(@GetOrgFromRequest() org: Organization) {
     return this._integrationService.customers(org.id);
+  }
+
+  @Post('/customers')
+  createCustomer(
+    @GetOrgFromRequest() org: Organization,
+    @Body() body: CustomerDto
+  ) {
+    return this._integrationService.createCustomer(
+      org.id,
+      body.name,
+      body.picture
+    );
+  }
+
+  @Put('/customers/:id')
+  updateCustomer(
+    @GetOrgFromRequest() org: Organization,
+    @Param('id') id: string,
+    @Body() body: CustomerDto
+  ) {
+    return this._integrationService.updateCustomer(
+      org.id,
+      id,
+      body.name,
+      body.picture
+    );
   }
 
   @Put('/:id/group')
@@ -198,6 +253,7 @@ export class IntegrationsController {
     @Query('externalUrl') externalUrl: string,
     @Query('redirectUrl') redirectUrl: string,
     @Query('onboarding') onboarding: string,
+    @Query('customer') customer: string,
     @GetOrgFromRequest() org: Organization
   ) {
     if (
@@ -236,6 +292,10 @@ export class IntegrationsController {
 
       if (redirectUrl) {
         await ioRedis.set(`redirect:${state}`, redirectUrl, 'EX', 3600);
+      }
+
+      if (customer) {
+        await ioRedis.set(`customer:${state}`, customer, 'EX', 3600);
       }
 
       await ioRedis.set(`organization:${state}`, org.id, 'EX', 3600);

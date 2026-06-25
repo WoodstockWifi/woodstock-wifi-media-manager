@@ -1,12 +1,18 @@
 import { PrismaRepository } from '@gitroom/nestjs-libraries/database/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { SaveMediaInformationDto } from '@gitroom/nestjs-libraries/dtos/media/save.media.information.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MediaRepository {
   constructor(private _media: PrismaRepository<'media'>) {}
 
-  saveFile(org: string, fileName: string, filePath: string, originalName?: string) {
+  saveFile(
+    org: string,
+    fileName: string,
+    filePath: string,
+    originalName?: string
+  ) {
     return this._media.model.media.create({
       data: {
         organization: {
@@ -75,7 +81,7 @@ export class MediaRepository {
   async getMedia(org: string, page: number, search?: string) {
     const pageNum = (page || 1) - 1;
     const trimmedSearch = search?.trim();
-    const searchFilter = trimmedSearch
+    const searchFilter: Prisma.MediaWhereInput = trimmedSearch
       ? {
           originalName: {
             contains: trimmedSearch,
@@ -83,7 +89,7 @@ export class MediaRepository {
           },
         }
       : {};
-    const query = {
+    const query: Prisma.MediaCountArgs = {
       where: {
         organization: {
           id: org,

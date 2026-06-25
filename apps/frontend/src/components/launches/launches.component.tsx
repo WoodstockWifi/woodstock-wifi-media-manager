@@ -335,13 +335,23 @@ export const LaunchesComponent = () => {
   const [collapseMenu, setCollapseMenu] = useCookie('collapseMenu', '0');
   const [mode] = useCookie('mode', 'dark');
   const { isLoading, data: integrations, mutate } = useIntegrationList();
+  const selectedCustomerId = search.get('customer') || '';
+  const scopedIntegrations = useMemo(() => {
+    if (!selectedCustomerId) {
+      return integrations;
+    }
+
+    return integrations.filter(
+      (integration: any) => integration?.customer?.id === selectedCustomerId
+    );
+  }, [integrations, selectedCustomerId]);
 
   const totalNonDisabledChannels = useMemo(() => {
     return (
-      integrations?.filter((integration: any) => !integration.disabled)
+      scopedIntegrations?.filter((integration: any) => !integration.disabled)
         ?.length || 0
     );
-  }, [integrations]);
+  }, [scopedIntegrations]);
   const changeItemGroup = useCallback(
     async (id: string, group: string) => {
       mutate(
@@ -370,11 +380,11 @@ export const LaunchesComponent = () => {
   );
   const sortedIntegrations = useMemo(() => {
     return orderBy(
-      integrations,
+      scopedIntegrations,
       ['type', 'disabled', 'identifier'],
       ['desc', 'asc', 'asc']
     );
-  }, [integrations]);
+  }, [scopedIntegrations]);
   const menuIntegrations = useMemo(() => {
     return orderBy(
       Object.values(

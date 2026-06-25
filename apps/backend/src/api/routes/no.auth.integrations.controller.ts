@@ -93,6 +93,12 @@ export class NoAuthIntegrationsController {
       await ioRedis.del(`onboarding:${body.state}`);
     }
 
+    const storedCustomer = await ioRedis.get(`customer:${body.state}`);
+    const customer = body.customer || storedCustomer;
+    if (storedCustomer) {
+      await ioRedis.del(`customer:${body.state}`);
+    }
+
     const {
       error,
       accessToken,
@@ -239,6 +245,14 @@ export class NoAuthIntegrationsController {
           : undefined
       );
 
+    if (customer && !refresh) {
+      await this._integrationService.updateIntegrationGroup(
+        org.id,
+        createUpdate.id,
+        customer
+      );
+    }
+
     this._refreshIntegrationService
       .startRefreshWorkflow(org.id, createUpdate.id, integrationProvider)
       .catch((err) => {
@@ -313,6 +327,7 @@ export class NoAuthIntegrationsController {
       pages,
       ...(returnURL ? { returnURL } : {}),
       ...(extensionToken ? { extensionToken } : {}),
+      ...(customer ? { customer } : {}),
     };
   }
 
@@ -329,7 +344,30 @@ export class NoAuthIntegrationsController {
 
     const org = await this._organizationService.getOrgById(organization);
 
-    return this._integrationService.saveProviderPage(org.id, id, body);
+    const secondStepCustomer = await ioRedis.get(`customer:${body.state}`);
+    const customer = body.customer || secondStepCustomer;
+    if (secondStepCustomer) {
+      await ioRedis.del(`customer:${body.state}`);
+    }
+
+    const result = await this._integrationService.saveProviderPage(
+      org.id,
+      id,
+      body
+    );
+
+    if (customer) {
+      await this._integrationService.updateIntegrationGroup(
+        org.id,
+        id,
+        customer
+      );
+    }
+
+    return {
+      ...result,
+      ...(customer ? { customer } : {}),
+    };
   }
 
   @Post('/extension-refresh')

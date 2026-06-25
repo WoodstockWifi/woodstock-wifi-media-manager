@@ -17,6 +17,7 @@ interface TwoStepState {
   onboarding: boolean;
   pages: any[];
   returnURL?: string;
+  customer?: string;
 }
 
 interface SuccessState {
@@ -38,6 +39,23 @@ export const ContinueIntegration: FC<{
   const [twoStepState, setTwoStepState] = useState<TwoStepState | null>(null);
   const [successState, setSuccessState] = useState<SuccessState | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const buildLaunchPath = useCallback(
+    (message: string, onboarding?: boolean, customer?: string) => {
+      const params = new URLSearchParams({
+        added: provider,
+        msg: message,
+      });
+      if (onboarding) {
+        params.set('onboarding', 'true');
+      }
+      if (customer) {
+        params.set('customer', customer);
+      }
+
+      return `/launches?${params.toString()}`;
+    },
+    [provider]
+  );
 
   // Helper to handle navigation - redirects if logged or returnURL exists, otherwise shows inline
   const navigateOrShow = useCallback(
@@ -154,8 +172,10 @@ export const ContinueIntegration: FC<{
         pages,
         returnURL,
         extensionToken,
+        customer: responseCustomer,
       } = await data.json();
       const onboarding = resOnboarding || searchParams.onboarding === 'true';
+      const customer = responseCustomer || searchParams.customer || '';
 
       // Store refresh token in extension for background cookie refresh
       if (
@@ -188,14 +208,13 @@ export const ContinueIntegration: FC<{
           onboarding,
           pages: pages || [],
           returnURL,
+          customer,
         });
         return;
       }
 
       navigateOrShow(
-        `/launches?added=${provider}&msg=Channel Updated${
-          onboarding ? '&onboarding=true' : ''
-        }`,
+        buildLaunchPath('Channel Updated', onboarding, customer),
         returnURL,
         'Channel Updated'
       );
@@ -216,7 +235,13 @@ export const ContinueIntegration: FC<{
 
         const response = await fetch(endpoint, {
           method: 'POST',
-          body: JSON.stringify({ ...modifiedParams, ...data }),
+          body: JSON.stringify({
+            ...modifiedParams,
+            ...data,
+            ...(twoStepState.customer
+              ? { customer: twoStepState.customer }
+              : {}),
+          }),
         });
 
         if (
@@ -232,9 +257,11 @@ export const ContinueIntegration: FC<{
         }
 
         navigateOrShow(
-          `/launches?added=${provider}&msg=Channel Added${
-            twoStepState.onboarding ? '&onboarding=true' : ''
-          }`,
+          buildLaunchPath(
+            'Channel Added',
+            twoStepState.onboarding,
+            twoStepState.customer
+          ),
           twoStepState.returnURL,
           'Channel Added'
         );
@@ -242,7 +269,7 @@ export const ContinueIntegration: FC<{
         setIsSaving(false);
       }
     },
-    [twoStepState, fetch, modifiedParams, provider, navigateOrShow]
+    [twoStepState, fetch, modifiedParams, buildLaunchPath, navigateOrShow]
   );
 
   const Provider = useMemo(() => {

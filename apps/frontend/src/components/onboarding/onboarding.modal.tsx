@@ -21,9 +21,7 @@ export const OnboardingModal: FC<OnboardingModalProps> = ({ onClose }) => {
 
   return (
     <div className="w-full min-h-full flex-1 p-[40px] flex relative">
-      <style>
-        {`#support-discord {display: none}`}
-      </style>
+      <style>{`#support-discord {display: none}`}</style>
       <div className="flex flex-1 bg-newBgColorInner rounded-[20px] flex-col relative">
         <button
           className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
@@ -214,7 +212,7 @@ const OnboardingStep1: FC<{ onNext: () => void; onSkip: () => void }> = ({
       <div className="flex justify-end pt-[24px] mt-[8px]">
         <button
           onClick={onNext}
-          className="group flex items-center gap-[12px] bg-gradient-to-r from-[#ff2364] to-[#00d2c8] hover:from-[#d81b52] hover:to-[#00b8b0] text-white font-semibold px-[32px] py-[14px] rounded-[12px] text-[16px] transition-all shadow-lg shadow-[#ff2364]/25 hover:shadow-[#ff2364]/40"
+          className="group flex items-center gap-[12px] bg-[#ff2364] hover:bg-[#d81b52] text-white font-semibold px-[32px] py-[14px] rounded-[12px] text-[16px] transition-all shadow-lg shadow-[#ff2364]/25 hover:shadow-[#ff2364]/40"
         >
           {sortedIntegrations.length > 0
             ? t('continue', 'Continue')
@@ -250,7 +248,10 @@ const OnboardingStep2: FC<{ onBack: () => void; onFinish: () => void }> = ({
     <div className="flex flex-col gap-[24px] flex-1">
       <div className="flex gap-[4px] flex-col text-center">
         <div className="text-[24px] font-semibold">
-          {t('watch_tutorial_title', 'Learn How to Use Woodstock & Wifi Media Manager')}
+          {t(
+            'watch_tutorial_title',
+            'Learn How to Use Woodstock & Wifi Media Manager'
+          )}
         </div>
         <div className="text-[14px] text-customColor18">
           {t(

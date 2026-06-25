@@ -8,7 +8,7 @@ import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { Button } from '@gitroom/react/form/button';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { ApiKeyDto } from '@gitroom/nestjs-libraries/dtos/integrations/api.key.dto';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { useToaster } from '@gitroom/react/toaster/toaster';
@@ -24,16 +24,23 @@ const resolver = classValidatorResolver(ApiKeyDto);
 export const useAddProvider = (update?: () => void, invite?: boolean) => {
   const modal = useModals();
   const fetch = useFetch();
+  const searchParams = useSearchParams();
+  const customer = searchParams.get('customer') || '';
   return useCallback(async () => {
     const data = await (await fetch('/integrations')).json();
     modal.openModal({
       title: 'Add Channel',
       withCloseButton: true,
       children: (
-        <AddProviderComponent invite={!!invite} update={update} {...data} />
+        <AddProviderComponent
+          invite={!!invite}
+          update={update}
+          customer={customer}
+          {...data}
+        />
       ),
     });
-  }, []);
+  }, [customer, fetch, invite, modal, update]);
 };
 export const AddProviderButton: FC<{
   update?: () => void;
@@ -170,8 +177,9 @@ export const CustomVariables: FC<{
   identifier: string;
   gotoUrl(url: string): void;
   onboarding?: boolean;
+  customer?: string;
 }> = (props) => {
-  const { close, gotoUrl, identifier, variables, onboarding } = props;
+  const { close, gotoUrl, identifier, variables, onboarding, customer } = props;
   const fetch = useFetch();
   const modals = useModals();
   const schema = useMemo(() => {
@@ -208,21 +216,38 @@ export const CustomVariables: FC<{
   });
   const submit = useCallback(
     async (data: FieldValues) => {
+      const socialParams = new URLSearchParams();
+      if (onboarding) {
+        socialParams.set('onboarding', 'true');
+      }
+      if (customer) {
+        socialParams.set('customer', customer);
+      }
+
       const { url } = await (
         await fetch(
           `/integrations/social/${identifier}${
-            onboarding ? '?onboarding=true' : ''
+            socialParams.size ? `?${socialParams.toString()}` : ''
           }`
         )
       ).json();
+      const redirectParams = new URLSearchParams({
+        state: url,
+        code: Buffer.from(JSON.stringify(data)).toString('base64'),
+      });
+      if (onboarding) {
+        redirectParams.set('onboarding', 'true');
+      }
+      if (customer) {
+        redirectParams.set('customer', customer);
+      }
+
       modals.closeAll();
       gotoUrl(
-        `/integrations/social/${identifier}?state=${url}&code=${Buffer.from(
-          JSON.stringify(data)
-        ).toString('base64')}${onboarding ? '&onboarding=true' : ''}`
+        `/integrations/social/${identifier}?${redirectParams.toString()}`
       );
     },
-    [variables, onboarding]
+    [customer, fetch, identifier, modals, onboarding]
   );
 
   const t = useT();
@@ -387,8 +412,9 @@ export const AddProviderComponent: FC<{
   update?: () => void;
   onboarding?: boolean;
   isMobile?: boolean;
+  customer?: string;
 }> = (props) => {
-  const { update, social, article, onboarding, isMobile } = props;
+  const { update, social, article, onboarding, isMobile, customer } = props;
   const { isGeneral, extensionId } = useVariables();
   const toaster = useToaster();
   const router = useRouter();
@@ -411,6 +437,9 @@ export const AddProviderComponent: FC<{
       ) =>
       async () => {
         const onboardingParam = onboarding ? 'onboarding=true' : '';
+        const customerParam = customer
+          ? `customer=${encodeURIComponent(customer)}`
+          : '';
         const openWeb3 = async () => {
           const { component: Web3Providers } = web3List.find(
             (item) => item.identifier === identifier
@@ -418,7 +447,11 @@ export const AddProviderComponent: FC<{
           const { url } = await (
             await fetch(
               `/integrations/social/${identifier}${
-                onboarding ? '?onboarding=true' : ''
+                [onboardingParam, customerParam].filter(Boolean).length
+                  ? `?${[onboardingParam, customerParam]
+                      .filter(Boolean)
+                      .join('&')}`
+                  : ''
               }`
             )
           ).json();
@@ -435,9 +468,17 @@ export const AddProviderComponent: FC<{
               >
                 <Web3Providers
                   onComplete={(code, newState) => {
-                    window.location.href = `/integrations/social/${identifier}?code=${code}&state=${newState}${
-                      onboarding ? '&onboarding=true' : ''
-                    }`;
+                    const params = new URLSearchParams({
+                      code,
+                      state: newState,
+                    });
+                    if (onboarding) {
+                      params.set('onboarding', 'true');
+                    }
+                    if (customer) {
+                      params.set('customer', customer);
+                    }
+                    window.location.href = `/integrations/social/${identifier}?${params.toString()}`;
                   }}
                   nonce={url}
                 />
@@ -452,8 +493,9 @@ export const AddProviderComponent: FC<{
           // back to the iOS/Android app after OAuth completes, instead
           // of the default web redirect.
           const params = [
-            `externalUrl=${encodeURIComponent(externalUrl)}`,
+            externalUrl ? `externalUrl=${encodeURIComponent(externalUrl)}` : '',
             onboardingParam,
+            customerParam,
             isMobile
               ? `redirectUrl=${encodeURIComponent('postiz://integrations')}`
               : '',
@@ -590,14 +632,28 @@ export const AddProviderComponent: FC<{
             const { url } = await (
               await fetch(
                 `/integrations/social/${identifier}${
-                  onboarding ? '?onboarding=true' : ''
+                  [onboardingParam, customerParam].filter(Boolean).length
+                    ? `?${[onboardingParam, customerParam]
+                        .filter(Boolean)
+                        .join('&')}`
+                    : ''
                 }`
               )
             ).json();
+            const redirectParams = new URLSearchParams({
+              state: url,
+              code: Buffer.from(
+                JSON.stringify(cookieResponse.cookies)
+              ).toString('base64'),
+            });
+            if (onboarding) {
+              redirectParams.set('onboarding', 'true');
+            }
+            if (customer) {
+              redirectParams.set('customer', customer);
+            }
             modal.closeAll();
-            window.location.href = `/integrations/social/${identifier}?state=${url}&code=${Buffer.from(
-              JSON.stringify(cookieResponse.cookies)
-            ).toString('base64')}${onboarding ? '&onboarding=true' : ''}`;
+            window.location.href = `/integrations/social/${identifier}?${redirectParams.toString()}`;
           } catch {
             toaster.show(
               t(
@@ -638,6 +694,7 @@ export const AddProviderComponent: FC<{
                   gotoUrl={(url: string) => router.push(url)}
                   variables={customFields}
                   onboarding={onboarding}
+                  customer={customer}
                 />
               </div>
             ),
@@ -646,7 +703,7 @@ export const AddProviderComponent: FC<{
         }
         await gotoIntegration();
       },
-    [onboarding]
+    [customer, extensionId, fetch, isMobile, modal, onboarding, router, toaster]
   );
 
   const t = useT();

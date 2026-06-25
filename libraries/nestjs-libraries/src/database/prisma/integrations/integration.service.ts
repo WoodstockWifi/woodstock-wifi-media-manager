@@ -140,6 +140,23 @@ export class IntegrationService {
     return this._integrationRepository.updateIntegrationGroup(org, id, group);
   }
 
+  createCustomer(org: string, name: string, picture?: string) {
+    return this._integrationRepository.createCustomer(
+      org,
+      name.trim(),
+      picture?.trim()
+    );
+  }
+
+  updateCustomer(org: string, id: string, name: string, picture?: string) {
+    return this._integrationRepository.updateCustomer(
+      org,
+      id,
+      name.trim(),
+      picture?.trim()
+    );
+  }
+
   updateOnCustomerName(org: string, id: string, name: string) {
     return this._integrationRepository.updateOnCustomerName(org, id, name);
   }
