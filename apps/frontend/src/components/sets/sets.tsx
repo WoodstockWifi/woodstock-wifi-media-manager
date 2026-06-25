@@ -46,10 +46,10 @@ const SaveSetModal: FC<{
         />
       </div>
       <div className="flex gap-2 justify-end">
-        <Button type="button" secondary onClick={onCancel}>
+        <Button type="button" secondary onClick={onCancel} className="rounded-[8px]">
           {t('cancel', 'Cancel')}
         </Button>
-        <Button type="submit" disabled={!name.trim()}>
+        <Button type="submit" disabled={!name.trim()} className="rounded-[8px]">
           {t('save', 'Save')}
         </Button>
       </div>
@@ -183,12 +183,14 @@ export const Sets: FC = () => {
                   <div className="flex flex-col justify-center">{p.name}</div>
                   <div className="flex flex-col justify-center">
                     <div>
-                      <Button onClick={addSet(p)}>{t('edit', 'Edit')}</Button>
+                      <Button onClick={addSet(p)} className="rounded-[8px]">
+                        {t('edit', 'Edit')}
+                      </Button>
                     </div>
                   </div>
                   <div className="flex flex-col justify-center">
                     <div>
-                      <Button onClick={deleteSet(p)}>
+                      <Button onClick={deleteSet(p)} className="rounded-[8px]">
                         {t('delete', 'Delete')}
                       </Button>
                     </div>
@@ -200,9 +202,12 @@ export const Sets: FC = () => {
           <div>
             <Button
               onClick={addSet()}
-              className={clsx((data?.length || 0) > 0 && 'my-[16px]')}
+              className={clsx(
+                'rounded-[8px]',
+                (data?.length || 0) > 0 && 'my-[16px]'
+              )}
             >
-              Add a set
+              {t('add_a_set', 'Add a set')}
             </Button>
           </div>
         </div>

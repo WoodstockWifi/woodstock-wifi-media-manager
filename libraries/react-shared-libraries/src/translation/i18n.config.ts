@@ -1,19 +1,12 @@
 export const fallbackLng = 'en';
 export const languages = [
+  'nl',
   fallbackLng,
-  'he',
-  'ru',
-  'zh',
-  'fr',
   'es',
-  'pt',
   'de',
+  'fr',
   'it',
-  'ja',
-  'ko',
-  'ar',
-  'tr',
-  'vi',
+  'pt',
 ];
 
 export const defaultNS = 'translation';

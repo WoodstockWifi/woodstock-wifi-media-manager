@@ -98,21 +98,24 @@ export const SignaturesComponent: FC<{
                   </div>
                   {!!appendSignature && (
                     <div className="flex justify-center">
-                      <Button onClick={() => appendSignature(p.content)}>
+                      <Button
+                        onClick={() => appendSignature(p.content)}
+                        className="rounded-[8px]"
+                      >
                         {t('use_signature', 'Use Signature')}
                       </Button>
                     </div>
                   )}
                   <div className="flex justify-center">
                     <div>
-                      <Button onClick={addSignature(p)}>
+                      <Button onClick={addSignature(p)} className="rounded-[8px]">
                         {t('edit', 'Edit')}
                       </Button>
                     </div>
                   </div>
                   <div className="flex justify-center">
                     <div>
-                      <Button onClick={deleteSignature(p)}>
+                      <Button onClick={deleteSignature(p)} className="rounded-[8px]">
                         {t('delete', 'Delete')}
                       </Button>
                     </div>
@@ -124,7 +127,10 @@ export const SignaturesComponent: FC<{
           <div>
             <Button
               onClick={addSignature()}
-              className={clsx((data?.length || 0) > 0 && 'my-[16px]')}
+              className={clsx(
+                'rounded-[8px]',
+                (data?.length || 0) > 0 && 'my-[16px]'
+              )}
             >
               {t('add_a_signature', 'Add a signature')}
             </Button>
@@ -233,7 +239,9 @@ const AddOrRemoveSignature: FC<{
             </option>
           </Select>
 
-          <Button type="submit">{t('save', 'Save')}</Button>
+          <Button type="submit" className="rounded-[8px]">
+            {t('save', 'Save')}
+          </Button>
         </div>
       </form>
     </FormProvider>

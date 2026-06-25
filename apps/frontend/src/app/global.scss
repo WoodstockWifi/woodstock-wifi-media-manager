@@ -695,10 +695,10 @@ html[dir='rtl'] [dir='ltr'] {
   }
 
   .mention {
-    background-color: var(--purple-light);
+    background-color: rgba(255, 35, 100, 0.14);
     border-radius: 0.4rem;
     box-decoration-break: clone;
-    color: #ae8afc;
+    color: #d81b52;
     &::after {
       content: '\200B';
     }

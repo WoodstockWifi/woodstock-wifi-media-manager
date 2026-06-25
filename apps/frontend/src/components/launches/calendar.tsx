@@ -79,11 +79,7 @@ i18next.on('languageChanged', () => {
 updateDayjsLocale();
 
 const convertTimeFormatBasedOnLocality = (time: number) => {
-  if (isUSCitizen()) {
-    return `${time === 12 ? 12 : time % 12}:00 ${time >= 12 ? 'PM' : 'AM'}`;
-  } else {
-    return `${time}:00`;
-  }
+  return `${String(time).padStart(2, '0')}:00`;
 };
 
 export const hours = Array.from(
@@ -268,19 +264,21 @@ export const DayView = () => {
   const currentLanguage = i18next.resolvedLanguage || 'en';
   dayjs.locale(currentLanguage);
 
-  const currentDay = dayjs.utc(startDate);
+  const currentDay = newDayjs(startDate);
 
   const options = useMemo(() => {
-    const createdPosts = posts.map((post) => ({
-      integration: [integrations.find((i) => i.id === post.integration.id)!],
-      image: post?.integration?.picture || '',
-      identifier: post?.integration?.providerIdentifier || '',
-      id: post?.integration?.id || '',
-      name: post?.integration?.name || '',
-      time: dayjs
-        .utc(post.publishDate)
-        .diff(dayjs.utc(post.publishDate).startOf('day'), 'minute'),
-    }));
+    const createdPosts = posts.map((post) => {
+      const publishDate = dayjs.utc(post.publishDate).local();
+
+      return {
+        integration: [integrations.find((i) => i.id === post.integration.id)!],
+        image: post?.integration?.picture || '',
+        identifier: post?.integration?.providerIdentifier || '',
+        id: post?.integration?.id || '',
+        name: post?.integration?.name || '',
+        time: publishDate.diff(publishDate.startOf('day'), 'minute'),
+      };
+    });
     return sortBy(
       Object.values(
         groupBy(
@@ -304,18 +302,29 @@ export const DayView = () => {
     );
   }, [integrations, posts]);
 
+  const timeRows = useMemo(() => {
+    if (options.length) {
+      return options;
+    }
+
+    return hours.map((hour) => [
+      {
+        integration: integrations,
+        time: hour * 60,
+      },
+    ]);
+  }, [integrations, options]);
+
   return (
     <div className="flex flex-col gap-[10px] flex-1 relative">
       <div className="absolute start-0 top-0 w-full h-full flex flex-col overflow-auto scrollbar scrollbar-thumb-fifth scrollbar-track-newBgColor">
-        {options.map((option) => (
+        {timeRows.map((option) => (
           <Fragment key={option[0].time}>
             <div className="text-center text-[14px] min-h-[21px]">
-              {newDayjs()
-                .utc()
+              {currentDay
                 .startOf('day')
                 .add(option[0].time, 'minute')
-                .local()
-                .format(isUSCitizen() ? 'hh:mm A' : 'LT')}
+                .format('HH:mm')}
             </div>
             <div
               key={option[0].time}
@@ -330,8 +339,7 @@ export const DayView = () => {
                 <CalendarColumn
                   getDate={currentDay
                     .startOf('day')
-                    .add(option[0].time, 'minute')
-                    .local()}
+                    .add(option[0].time, 'minute')}
                 />
               </CalendarContext.Provider>
             </div>
@@ -541,7 +549,7 @@ export const ListView = () => {
         {groupedPosts.map(([dateKey, datePosts]) => (
           <Fragment key={dateKey}>
             <div className="text-center text-[14px] min-h-[21px] text-textColor font-[500] mt-[10px]">
-              {newDayjs(dateKey).format(isUSCitizen() ? 'dddd, MMMM D, YYYY' : 'dddd, D MMMM YYYY')}
+              {newDayjs(dateKey).format('dddd, D MMMM YYYY')}
             </div>
             <div className="flex flex-col gap-[10px] mb-[20px] px-[10px]">
               {datePosts.map((post) => (
@@ -1175,7 +1183,7 @@ const CalendarItem: FC<{
         </div>
         {showTime && (
           <div className="text-textColor/50 text-[12px] whitespace-nowrap flex items-center">
-            {newDayjs(post.publishDate).local().format(isUSCitizen() ? 'hh:mm A' : 'HH:mm')}
+            {newDayjs(post.publishDate).local().format('HH:mm')}
           </div>
         )}
       </div>

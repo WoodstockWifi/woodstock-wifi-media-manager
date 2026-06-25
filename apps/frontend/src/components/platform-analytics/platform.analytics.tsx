@@ -2,7 +2,7 @@
 
 import useSWR from 'swr';
 import { useCallback, useMemo, useState } from 'react';
-import { capitalize, orderBy } from 'lodash';
+import { orderBy } from 'lodash';
 import clsx from 'clsx';
 import ImageWithFallback from '@gitroom/react/helpers/image.with.fallback';
 import SafeImage from '@gitroom/react/helpers/safe.image';
@@ -157,11 +157,10 @@ export const PlatformAnalytics = () => {
             'You have to add Social Media channels'
           )}
         </div>
-        <div className="text-[20px]">
-          {t('supported', 'Supported:')}
-          {allowedIntegrations.map((p) => capitalize(p)).join(', ')}
-        </div>
-        <Button onClick={() => router.push('/launches')}>
+        <Button
+          onClick={() => router.push('/launches')}
+          className="!h-[44px] !px-[28px] rounded-[8px] text-[14px] font-[700] hover:!bg-[#d81b52] transition-colors"
+        >
           {t(
             'go_to_the_calendar_to_add_channels',
             'Go to the calendar to add channels'
